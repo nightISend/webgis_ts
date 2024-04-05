@@ -1,27 +1,47 @@
 <template>
-  <div class="common-layout">
-    <el-container>
-      <el-header>Header</el-header>
-      <el-main>Main</el-main>
-    </el-container>
-  </div>
-  <div class="mb-4">
-    <el-button>Default</el-button>
-    <el-button type="primary">Primary</el-button>
-    <el-button type="success">Success</el-button>
-    <el-button type="info">Info</el-button>
-    <el-button type="warning">Warning</el-button>
-    <el-button type="danger">Danger</el-button>
+  <div class="common-layout" style="width: 100%;height: 730px;">
+    <div class="title">标题</div>
+    <div class="sidebox" style="border-bottom-left-radius:30px">
+      <div class="boxInSide1"></div>
+      <div class="boxInSide2" style="border-bottom-left-radius:30px"></div>
+    </div>
+    <div class="mainbox" >主框</div>
+    <div class="sidebox" style="float: right;border-bottom-right-radius:30px">
+      <div class="boxInSide1"></div>
+      <div class="boxInSide2"style="border-bottom-right-radius:30px"></div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import {
-  Check,
-  Delete,
-  Edit,
-  Message,
-  Search,
-  Star,
-} from '@element-plus/icons-vue'
+
 </script>
+<style>
+.title{
+  height: 50px; 
+  text-align: center; 
+  background-color: beige;
+  border-top-left-radius: 30px ;
+  border-top-right-radius: 30px ;
+}
+.sidebox{
+  height: 680px;
+  width: 15%;
+  background-color: darkcyan;
+  float: left;
+}
+.mainbox{
+  height: 680px;
+  width: 70%;
+  background-color: rgb(70, 233, 151);
+  float: left;
+}
+.boxInSide1{
+  height: 50%;
+  background-color: aquamarine;
+}
+.boxInSide2{
+  height: 50%;
+  background-color: rgb(178, 216, 249);
+}
+</style>
