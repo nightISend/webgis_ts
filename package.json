@@ -13,12 +13,14 @@
   "dependencies": {
     "element-plus": "^2.6.3",
     "pinia": "^2.1.7",
+    "three": "^0.163.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
     "@types/node": "^20.11.28",
+    "@types/three": "^0.163.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/tsconfig": "^0.5.1",
     "npm-run-all2": "^6.1.2",

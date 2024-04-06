@@ -5,7 +5,9 @@
       <div class="boxInSide1"></div>
       <div class="boxInSide2" style="border-bottom-left-radius:30px"></div>
     </div>
-    <div class="mainbox" >主框</div>
+    <div class="mainbox" >
+      <threeMap></threeMap>
+    </div>
     <div class="sidebox" style="float: right;border-bottom-right-radius:30px">
       <div class="boxInSide1"></div>
       <div class="boxInSide2"style="border-bottom-right-radius:30px"></div>
@@ -14,8 +16,11 @@
 </template>
 
 <script setup>
+import threeMap from './components/threeMap.vue';
 
 </script>
+
+
 <style>
 .title{
   height: 50px; 
