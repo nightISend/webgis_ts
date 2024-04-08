@@ -3,15 +3,18 @@
         
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
     import * as THREE from 'three';
     import { onMounted } from 'vue';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import * as d3 from "d3";
 
 
     //因为setup先于挂载，将放到容器的操作放到setup里会出现div还没出现就查找div的情况，所有将渲染器放到容器的操作放到完成挂载后执行
     onMounted(()=>{
         document.getElementById('vessal').appendChild( renderer.domElement );
+        animate();
+        loadmap();
     })
 
     const scene = new THREE.Scene();
@@ -42,7 +45,6 @@
         controls.update();
         renderer.render( scene, camera );//调整立方体的xy轴使其选择，并重新渲染
     }
-    animate();
 
     //重新渲染
     function update(){
@@ -63,6 +65,52 @@
         scene.add( light );
     }
 
+    //加载中国geojosn数据
+    async function loadmap(){
+        const loader = new THREE.FileLoader();
+        //接收中国包含子区域的shp及中国边界，返回的res对象是一个响应式数组,只有0和1有数据，因为有2个数据，数组里是josn数据
+        let res= await Promise.all([
+            loader.loadAsync('src/assets/geojosn/CHN.json'),
+            loader.loadAsync('src/assets/geojosn/CHN_border.json')
+        ]);
+
+        if(res instanceof Array){
+            createmap(res[0]);
+        }
+
+    }
+
+    //创建d3投影坐标系用于放置坐标
+    const projection =d3
+        .geoMercator()//设置投影方法，球形墨卡托投影
+        .scale(84)//缩放
+        .center([108.5525,34.3227])//中心
+        .translate([0,0])//移动
+
+    //创建地图，通过读取geojosn数据获得每一个坐标点数据
+    function createmap(res:any){
+        var res=JSON.parse(res);
+        // console.log(res);
+        res.features.forEach((element:any)=> {//遍历feature里的每一个数据的类型
+            // console.log(element)
+            if(element.geometry.type=='MultiPolygon'){
+                element.geometry.coordinates.forEach((MultiPolygon:any)=>{//遍历feature里每一个多面体的的数据
+                    MultiPolygon.forEach((polygon:any)=>{//遍历多面体里每一个单面体的的数据
+                        polygon.forEach((coord:any)=>{//遍历每一个单面体的坐标
+                            // console.log(coord)
+                        })
+                    })
+                })
+            }
+            else if(element.geometry.type=='Polygon'){
+                element.geometry.coordinates.forEach((polygon:any)=>{
+                        polygon.forEach((coord:any)=>{
+                            // console.log(coord)
+                        })
+                })
+            }
+        });
+    }
 </script>
 <style>
 .main{
