@@ -8,6 +8,7 @@
     import { onMounted } from 'vue';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import * as d3 from "d3";
+import { transferPanelEmits } from 'element-plus/es/components/transfer/src/transfer-panel.mjs';
 
 
     //因为setup先于挂载，将放到容器的操作放到setup里会出现div还没出现就查找div的情况，所有将渲染器放到容器的操作放到完成挂载后执行
@@ -29,13 +30,7 @@
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setPixelRatio(window.devicePixelRatio);//使模型更清晰
 
-    //创建一个立方体对象，包括长宽高，材质并添加到场景
-    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    const cube = new THREE.Mesh( geometry, material );
-    scene.add( cube );
-
-    camera.position.z = 5;
+    camera.position.z = 60;
 
     //添加轨道控制器，当页面要重新渲染时控制器也要更新
     const controls = new OrbitControls( camera, renderer.domElement );
@@ -87,18 +82,37 @@
         .center([108.5525,34.3227])//中心
         .translate([0,0])//移动
 
+    //创建用于存放3d地图工程
+    let chinaobj=new THREE.Object3D()
+
     //创建地图，通过读取geojosn数据获得每一个坐标点数据
     function createmap(res:any){
         var res=JSON.parse(res);
         // console.log(res);
         res.features.forEach((element:any)=> {//遍历feature里的每一个数据的类型
             // console.log(element)
+            let provinceobj=new THREE.Object3D();//用于存放每一个省份的地图对象
             if(element.geometry.type=='MultiPolygon'){
                 element.geometry.coordinates.forEach((MultiPolygon:any)=>{//遍历feature里每一个多面体的的数据
                     MultiPolygon.forEach((polygon:any)=>{//遍历多面体里每一个单面体的的数据
+                        const shape = new THREE.Shape();
+                        let arr:number[]=[];
                         polygon.forEach((coord:any)=>{//遍历每一个单面体的坐标
-                            // console.log(coord)
+                            console.log(coord)
+                            let z=projection(coord);
+                             console.log(z)
+                            if(coord.index==0){
+                                shape.moveTo(z[0],-z[1])
+                            }
+                            else{
+                                shape.lineTo(z[0],-z[1])
+                            }
+                            // let arr1=[coord[0],-coord[1],-1]
+                            arr.push(z[0],-z[1],1)
+                            // console.log(arr)
                         })
+                        // let mesh=createExtrudeGeometry(shape,arr,element);
+                        // provinceobj.add(mesh);
                     })
                 })
             }
@@ -109,7 +123,42 @@
                         })
                 })
             }
+            chinaobj.add(provinceobj);
         });
+        scene.add(chinaobj);//把地图添加到创建，在创建缓冲几何体时，线会被添加进chinaobj
+    }
+
+    
+    //创建挤压缓冲几何体（ExtrudeGeometry），将二维地图做成三维,放回一个mesh对象
+    function createExtrudeGeometry(shape:any,arr:number[],element:any){
+        //地图材质的参数
+        let meshmaterrial={
+            color:0x00ff00,
+            transparent:true,
+            opacity:0.8,
+            blending:THREE.AdditiveBlending
+        }
+        //边界材质的参数
+        let linematerrial={
+            color:0x00ffff,
+            blending:THREE.AdditiveBlending
+        }
+        const geometry = new THREE.ExtrudeGeometry( shape );
+        const material = new THREE.MeshBasicMaterial( meshmaterrial );//创建材质
+        const mesh = new THREE.Mesh( geometry, material ) ;
+        //给画出来的省份名字
+        if(element.properties.name){
+            mesh.name=element.properties.name;
+        }
+        //画线
+        let buffer=new THREE.BufferGeometry();
+        buffer.setAttribute(
+            'position',
+            new THREE.BufferAttribute(new Float64Array(arr),3));
+        let line=new THREE.Line(buffer,new THREE.LineBasicMaterial(linematerrial));
+        //把线添加到工程
+        chinaobj.add(line);//添加边界数据
+        return mesh;
     }
 </script>
 <style>
