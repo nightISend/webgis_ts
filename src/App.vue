@@ -1,6 +1,6 @@
 <template>
-  <div class="common-layout" style="width: 100%;height: 730px;">
-    <div class="title">标题</div>
+  <div class="title">标题</div>
+  <div class="common-layout">
     <div class="sidebox" style="border-bottom-left-radius:30px">
       <div class="boxInSide1"></div>
       <div class="boxInSide2" style="border-bottom-left-radius:30px"></div>
@@ -29,6 +29,11 @@ import threeMap from './components/threeMap.vue';
   border-top-left-radius: 30px ;
   border-top-right-radius: 30px ;
 }
+.common-layout{
+  position: absolute;
+  width: 100%;
+  display: flex;
+}
 .sidebox{
   height: 680px;
   width: 15%;
@@ -36,9 +41,8 @@ import threeMap from './components/threeMap.vue';
   float: left;
 }
 .mainbox{
-  height: 680px;
-  width: 70%;
   background-color: rgb(70, 233, 151);
+  flex: 1;
   float: left;
 }
 .boxInSide1{

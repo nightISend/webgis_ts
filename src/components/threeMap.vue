@@ -8,14 +8,15 @@
     import { onMounted } from 'vue';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import * as d3 from "d3";
-import { transferPanelEmits } from 'element-plus/es/components/transfer/src/transfer-panel.mjs';
 
 
     //因为setup先于挂载，将放到容器的操作放到setup里会出现div还没出现就查找div的情况，所有将渲染器放到容器的操作放到完成挂载后执行
     onMounted(()=>{
-        document.getElementById('vessal').appendChild( renderer.domElement );
+        document.getElementById('vessal')?.appendChild( renderer.domElement );
         animate();
         loadmap();
+        addAmbientLight(0.55);
+        
     })
 
     const scene = new THREE.Scene();
@@ -75,17 +76,17 @@ import { transferPanelEmits } from 'element-plus/es/components/transfer/src/tran
 
     }
 
-    //创建d3投影坐标系用于放置坐标
+    //创建d3坐标
     const projection =d3
-        .geoMercator()//设置投影方法，球形墨卡托投影
-        .scale(84)//缩放
-        .center([108.5525,34.3227])//中心
-        .translate([0,0])//移动
+        .geoMercator()
+        .scale(84)
+        .center([108.5525,34.3227])
+        .translate([0,0])
 
     //创建用于存放3d地图工程
     let chinaobj=new THREE.Object3D()
 
-    //创建地图，通过读取geojosn数据获得每一个坐标点数据
+    //创建地图，通过读取geojosn数据获得每一个坐标点数据，放到
     function createmap(res:any){
         var res=JSON.parse(res);
         // console.log(res);
@@ -97,64 +98,80 @@ import { transferPanelEmits } from 'element-plus/es/components/transfer/src/tran
                     MultiPolygon.forEach((polygon:any)=>{//遍历多面体里每一个单面体的的数据
                         const shape = new THREE.Shape();
                         let arr:number[]=[];
-                        polygon.forEach((coord:any)=>{//遍历每一个单面体的坐标
-                            console.log(coord)
+                        polygon.forEach((coord:any,index:number)=>{//遍历每一个单面体的坐标
                             let z=projection(coord);
-                             console.log(z)
-                            if(coord.index==0){
-                                shape.moveTo(z[0],-z[1])
+                            if(z){
+                                if(index==0){
+                                    shape.moveTo(z[0],-z[1])
+                                }
+                                else{
+                                    shape.lineTo(z[0],-z[1])
+                                }
+                                arr.push(z[0],-z[1],1)
                             }
-                            else{
-                                shape.lineTo(z[0],-z[1])
-                            }
-                            // let arr1=[coord[0],-coord[1],-1]
-                            arr.push(z[0],-z[1],1)
-                            // console.log(arr)
                         })
-                        // let mesh=createExtrudeGeometry(shape,arr,element);
-                        // provinceobj.add(mesh);
+                        let mesh=createExtrudeGeometry(shape,arr,element);
+                        provinceobj.add(mesh);
                     })
                 })
             }
             else if(element.geometry.type=='Polygon'){
                 element.geometry.coordinates.forEach((polygon:any)=>{
-                        polygon.forEach((coord:any)=>{
-                            // console.log(coord)
+                        const shape = new THREE.Shape();
+                        let arr:number[]=[];
+                        polygon.forEach((coord:any,index:number)=>{
+                            let z=projection(coord);
+                            if(z){
+                                if(index==0){
+                                    shape.moveTo(z[0],-z[1])
+                                }
+                                else{
+                                    shape.lineTo(z[0],-z[1])
+                                }
+                                arr.push(z[0],-z[1],1)
+                            }
                         })
+                        let mesh=createExtrudeGeometry(shape,arr,element);
+                        provinceobj.add(mesh);
                 })
             }
             chinaobj.add(provinceobj);
         });
-        scene.add(chinaobj);//把地图添加到创建，在创建缓冲几何体时，线会被添加进chinaobj
+         scene.add(chinaobj);//把地图添加到创建，在创建缓冲几何体时，线会被添加进chinaobj
     }
 
     
     //创建挤压缓冲几何体（ExtrudeGeometry），将二维地图做成三维,放回一个mesh对象
     function createExtrudeGeometry(shape:any,arr:number[],element:any){
         //地图材质的参数
-        let meshmaterrial={
-            color:0x00ff00,
-            transparent:true,
-            opacity:0.8,
-            blending:THREE.AdditiveBlending
-        }
+        let meshmaterrial=[
+            new THREE.MeshBasicMaterial({
+                color:0x00ff00,
+                transparent:true,
+                opacity:0.8,
+                blending:THREE.AdditiveBlending
+            }),
+            new THREE.MeshBasicMaterial({
+                color:0x00ff00,
+                transparent:true,
+                opacity:0.35,
+                blending:THREE.AdditiveBlending
+            }),
+        ]
         //边界材质的参数
         let linematerrial={
             color:0x00ffff,
             blending:THREE.AdditiveBlending
         }
         const geometry = new THREE.ExtrudeGeometry( shape );
-        const material = new THREE.MeshBasicMaterial( meshmaterrial );//创建材质
-        const mesh = new THREE.Mesh( geometry, material ) ;
+        const mesh = new THREE.Mesh( geometry, meshmaterrial ) ;
         //给画出来的省份名字
         if(element.properties.name){
             mesh.name=element.properties.name;
         }
         //画线
         let buffer=new THREE.BufferGeometry();
-        buffer.setAttribute(
-            'position',
-            new THREE.BufferAttribute(new Float64Array(arr),3));
+        buffer.setAttribute('position',new THREE.BufferAttribute(new Float32Array(arr),3));//只能用32位，不知道为什么
         let line=new THREE.Line(buffer,new THREE.LineBasicMaterial(linematerrial));
         //把线添加到工程
         chinaobj.add(line);//添加边界数据
