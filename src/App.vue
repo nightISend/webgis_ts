@@ -1,5 +1,4 @@
 <template>
-  <div class="title">标题</div>
   <div class="common-layout">
     <div class="sidebox" style="border-bottom-left-radius:30px">
       <div class="boxInSide1"></div>
