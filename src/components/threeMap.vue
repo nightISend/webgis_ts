@@ -198,7 +198,7 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
         raycaster.setFromCamera(mouse, camera);
         // 计算物体和射线的焦点
         const intersects = raycaster.intersectObjects(scene.children, true);
-        console.log(intersects)
+        // console.log(intersects)
         cuurrentObj
           ? cuurrentObj.object.scale.set(1, 1, 1)
           : (cuurrentObj = null);
@@ -208,7 +208,9 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
           //判断鼠标碰到的object是不是
           if (intersects[0].object.isObject3D) {
             cuurrentObj = intersects[0];
-            intersects[0].object.scale.set(1.2, 1.2, 1.2);
+            if(cuurrentObj.object.type=='Mesh'){
+                intersects[0].object.scale.set(1.2, 1.2, 1.2);
+            }
           }
         }
       };
