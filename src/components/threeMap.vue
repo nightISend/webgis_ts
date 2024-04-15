@@ -17,7 +17,8 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
         animate();
         loadmap();
         addAmbientLight(0.55);
-        addEventListener('mousemove',mouseEvent)
+        addEventListener('mousemove',mouseEmphasizeEvent);
+        addEventListener('click',mouseClickEvent);
     })
 
     const scene = new THREE.Scene();
@@ -189,9 +190,8 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
     //鼠标悬浮，模型突出
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-    let cuurrentObj:any = null;
-
-    const mouseEvent = (e:any) => {
+    let cuurrentObj:any = null; 
+    const mouseEmphasizeEvent = (e:any) => {
         // 将鼠标位置归一化为设备坐标。x 和 y 方向的取值范围是 (-1 to +1)
         mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -205,14 +205,55 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
 
         if (intersects.length) {
           //处理选中的最上层对象
-          //判断鼠标碰到的object是不是
-          if (intersects[0].object.isObject3D) {
+          if (intersects[0].object.isObject3D) {//判断鼠标碰到的是不是object对象
             cuurrentObj = intersects[0];
-            if(cuurrentObj.object.type=='Mesh'){
+            if(cuurrentObj.object.type=='Mesh'){//判断对象是不是mesh类型的
                 intersects[0].object.scale.set(1.2, 1.2, 1.2);
             }
           }
         }
+      };
+    
+    //鼠标点击，单独呈现省份模型，再次点击模型恢复中国模型
+    const raycasterClick = new THREE.Raycaster();
+    const mouseClick = new THREE.Vector2();
+    let cuurrentObjClick:any = null;
+    let isDisplayAlone=false;//判断是否单独显示省份模型
+    const mouseClickEvent = (e:any) => {
+        // 将鼠标位置归一化为设备坐标。x 和 y 方向的取值范围是 (-1 to +1)
+            mouseClick.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseClick.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            raycasterClick.setFromCamera(mouseClick, camera);
+            // 计算物体和射线的焦点
+            const intersects = raycasterClick.intersectObjects(scene.children, true);
+            // console.log(intersects)
+            cuurrentObjClick? cuurrentObjClick.object.scale.set(1, 1, 1)
+            : (cuurrentObjClick = null);
+            if (intersects.length) {
+            //单独展示选中的模型
+                if(isDisplayAlone==false){
+                    if (intersects[0].object.isObject3D) {//判断鼠标碰到的是不是object对象
+                        cuurrentObjClick = intersects[0];
+                            if(cuurrentObjClick.object.type=='Mesh'){//判断对象是不是mesh类型的
+                                let objectAlone=cuurrentObjClick.object;
+                                isDisplayAlone=true;
+                                scene.remove(chinaobj);
+                                scene.add(cuurrentObjClick.object);
+                                camera.position.set(mouseClick.x, mouseClick.y, 28);
+                                camera.lookAt(mouseClick.x*1000, mouseClick.y*10, 28);
+                                console.log(camera.position)
+                            }
+                        }
+                }
+                else{
+                    //清除单独显示的省份模型并重新展示中国模型
+                    scene.clear();
+                    camera.position.set(0,0,65);
+                    chinaobj.add(cuurrentObjClick.object);
+                    isDisplayAlone=false;
+                    scene.add(chinaobj);
+                }
+            }
       };
 </script>
 <style>
