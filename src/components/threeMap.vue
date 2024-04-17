@@ -11,11 +11,12 @@
 import { element } from 'three/examples/jsm/nodes/Nodes.js';
 
 
-    //因为setup先于挂载，将放到容器的操作放到setup里会出现div还没出现就查找div的情况，所有将渲染器放到容器的操作放到完成挂载后执行
+
+    //因为setup先于挂载，将获取容器的操作放到setup里会出现div还没出现就查找div的情况，所有将渲染器放到容器的操作放到完成挂载后执行
     onMounted(()=>{
         document.getElementById('vessal')?.appendChild( renderer.domElement );
         animate();
-        loadmap();
+        loadmap();//创建中国地图
         addAmbientLight(0.55);
         addEventListener('mousemove',mouseEmphasizeEvent);
         addEventListener('click',mouseClickEvent);
@@ -88,6 +89,14 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
 
     //创建用于存放3d地图工程
     let chinaobj=new THREE.Object3D()
+    
+    //定义省份类型，用于存放省份的坐标和名称
+    type province={
+        name:string,
+        coordinate:any,
+        center:number[]
+    }
+    let provinceShape:province[]=[];//在createmap方法调用时，即创建中国地图时存放各个身份的名称、边界坐标和中心坐标
 
     //创建地图，通过读取geojosn数据获得每一个坐标点数据，放到
     function createmap(res:any){
@@ -100,8 +109,12 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
                 element.geometry.coordinates.forEach((MultiPolygon:any)=>{//遍历feature里每一个多面体的的数据
                     MultiPolygon.forEach((polygon:any)=>{//遍历多面体里每一个单面体的的数据
                         const shape = new THREE.Shape();
-                        let arr:number[]=[];
+                        let arr:number[]=[];//用于存放边界
+                        let x:number=0;//用于记录各个省份的中心
+                        let y:number=0;
                         polygon.forEach((coord:any,index:number)=>{//遍历每一个单面体的坐标
+                            x=x+coord[0];
+                            y=y+coord[1];
                             let z=projection(coord);
                             if(z){
                                 if(index==0){
@@ -115,6 +128,14 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
                         })
                         let mesh=createExtrudeGeometry(shape,arr,element);
                         provinceobj.add(mesh);
+
+                        let center=[x/polygon.length,y/polygon.length];
+                        let p:province={//用于临时存放省份名称和坐标
+                            name:element.properties.name,
+                            coordinate:polygon,
+                            center:center
+                        }
+                        provinceShape.push(p);//将省份的polygon和名称存入数组
                     })
                 })
             }
@@ -122,7 +143,11 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
                 element.geometry.coordinates.forEach((polygon:any)=>{
                         const shape = new THREE.Shape();
                         let arr:number[]=[];
+                        let x:number=0;//用于记录各个省份的中心
+                        let y:number=0;
                         polygon.forEach((coord:any,index:number)=>{
+                            x=x+coord[0];
+                            y=y+coord[1];
                             let z=projection(coord);
                             if(z){
                                 if(index==0){
@@ -136,6 +161,14 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
                         })
                         let mesh=createExtrudeGeometry(shape,arr,element);
                         provinceobj.add(mesh);
+
+                        let center=[x/polygon.length,y/polygon.length];
+                        let p:province={//用于临时存放省份名称和坐标
+                            name:element.properties.name,
+                            coordinate:polygon,
+                            center:center
+                        }
+                        provinceShape.push(p);//将省份的polygon和名称存入数组
                 })
             }
             chinaobj.add(provinceobj);
@@ -231,19 +264,59 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
             : (cuurrentObjClick = null);
             if (intersects.length) {
             //单独展示选中的模型
-                if(isDisplayAlone==false){
+                if(isDisplayAlone==false){//判断是否已经单独呈现省份
                     if (intersects[0].object.isObject3D) {//判断鼠标碰到的是不是object对象
                         cuurrentObjClick = intersects[0];
-                            if(cuurrentObjClick.object.type=='Mesh'){//判断对象是不是mesh类型的
-                                let objectAlone=cuurrentObjClick.object;
-                                isDisplayAlone=true;
-                                scene.remove(chinaobj);
-                                scene.add(cuurrentObjClick.object);
-                                camera.position.set(mouseClick.x, mouseClick.y, 28);
-                                camera.lookAt(mouseClick.x*1000, mouseClick.y*10, 28);
-                                console.log(camera.position)
-                            }
+                        if(cuurrentObjClick.object.type=='Mesh'){//判断对象是不是mesh类型的
+                            // console.log(cuurrentObjClick.object.name)
+                            isDisplayAlone=true;
+                            scene.remove(chinaobj);
+                            //创建居中的省份
+                            provinceShape.forEach((element:province)=>{
+                                if(element.name==cuurrentObjClick.object.name){
+                                    const projectionAlone=d3
+                                        .geoMercator()
+                                        .scale(200)
+                                        .center([element.center[0],element.center[1]])
+                                        .translate([0,0])
+
+                                    const shape = new THREE.Shape();
+                                    element.coordinate.forEach((coord:any,index:number)=>{//遍历每一个单面体的坐标
+                                        let z=projectionAlone(coord);
+                                        if(z){
+                                            if(index==0){
+                                                shape.moveTo(z[0],-z[1])
+                                            }
+                                            else{
+                                                shape.lineTo(z[0],-z[1])
+                                            }
+                                        }
+                                    })
+                                    let meshmaterrial=[
+                                        new THREE.MeshBasicMaterial({
+                                            color:'#0C8965',//外部颜色
+                                            transparent:true,
+                                            opacity:0.8,
+                                            blending:THREE.AdditiveBlending
+                                        }),
+                                        new THREE.MeshBasicMaterial({
+                                            color:'#0C8965',//内部颜色
+                                            transparent:true,
+                                            opacity:0.35,
+                                            blending:THREE.AdditiveBlending
+                                        }),
+                                    ]
+                                    const extrudeSettings={
+                                        depth: 5,
+                                        steps: 2,
+                                    }
+                                    const geometry = new THREE.ExtrudeGeometry( shape ,extrudeSettings);
+                                    const mesh = new THREE.Mesh( geometry, meshmaterrial ) ;
+                                    scene.add(mesh);  
+                                }
+                            })
                         }
+                    }
                 }
                 else{
                     //清除单独显示的省份模型并重新展示中国模型
