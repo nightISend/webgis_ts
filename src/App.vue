@@ -5,9 +5,9 @@
 
     <!-- 左边框 -->
     <el-row class="sidebox1">
-      <el-col :span="24"><div class="ChiYun" >慈云</div></el-col>
+      <el-col :span="24"><div class="ChiYun" ><wordcloud></wordcloud></div></el-col>
       <el-col :span="24"><div class="titleCartogram"></div></el-col>
-      <el-col :span="24"><div class="cartogram">统计图</div></el-col>
+      <el-col :span="24"><div class="cartogram"><Statistics></Statistics></div></el-col>
     </el-row>
     
     <!-- 右边框 -->
@@ -24,6 +24,8 @@
 <script setup>
 import threeMap from './components/threeMap.vue';
 import {useSenceStore} from './stores/useScenicSpot.ts'
+import Statistics from './views/Statistics.vue'
+import wordcloud from './views/wordcloud.vue'
 
 const sence=useSenceStore();
 
@@ -77,8 +79,9 @@ const sence=useSenceStore();
   width: inherit;
   height: 370px;
   background-color:#DCDFE6;
-  border-bottom-left-radius:4px;
-  border-bottom-right-radius:4px;
+  opacity:1;
+  border-radius:4px;
+  /* border-bottom-right-radius:4px; */
   box-shadow: 12px 12px 12px 0 rgba(0, 0, 0, 0.1)
 }
 .textTitle{

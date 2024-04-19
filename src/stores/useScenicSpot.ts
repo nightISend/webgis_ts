@@ -4,6 +4,12 @@ import { defineStore } from 'pinia'
 
 export const useSenceStore = defineStore('ScenicStore', () => {
     const chinaScenic = [
+         {"name":'中国',
+            "attractions":[{
+               "name":"中国",
+               "coordinate":[108.5525,34.3227]
+            }]
+         },
         {"name":'北京市',
          "attractions":[{
             "name":"长城",
