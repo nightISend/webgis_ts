@@ -8,7 +8,7 @@
     import { onMounted } from 'vue';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import * as d3 from "d3";
-import { element } from 'three/examples/jsm/nodes/Nodes.js';
+    import { element } from 'three/examples/jsm/nodes/Nodes.js';
 
 
 
@@ -17,7 +17,7 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
         document.getElementById('vessal')?.appendChild( renderer.domElement );
         animate();
         loadmap();//创建中国地图
-        addAmbientLight(0.55);
+        // addAmbientLight(0.55);
         addEventListener('mousemove',mouseEmphasizeEvent);
         addEventListener('click',mouseClickEvent);
     })
@@ -31,11 +31,11 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
 
     //创建渲染器并设置渲染器的尺寸
     const renderer = new THREE.WebGLRenderer();
-    // renderer.setClearColor('#ECD9EA',1)
+    renderer.setClearColor('#EBEEF5',0.3)
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setPixelRatio(window.devicePixelRatio);//使模型更清晰
 
-    camera.position.z = 65;//用于调整摄像机初始高度
+    camera.position.z = 70;//用于调整摄像机初始高度
 
     //添加轨道控制器，当页面要重新渲染时控制器也要更新
     const controls = new OrbitControls( camera, renderer.domElement );
@@ -182,15 +182,15 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
         //地图材质的参数
         let meshmaterrial=[
             new THREE.MeshBasicMaterial({
-                color:'#0C8965',//外部颜色
+                color:'#606266',//外部颜色
                 transparent:true,
-                opacity:0.8,
+                opacity:1,
                 blending:THREE.AdditiveBlending
             }),
             new THREE.MeshBasicMaterial({
-                color:'#0C8965',//内部颜色
+                color:'#000000',//内部颜色
                 transparent:true,
-                opacity:0.35,
+                opacity:1,
                 blending:THREE.AdditiveBlending
             }),
         ]
@@ -294,15 +294,15 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
                                     })
                                     let meshmaterrial=[
                                         new THREE.MeshBasicMaterial({
-                                            color:'#0C8965',//外部颜色
+                                            color:'#606266',//外部颜色
                                             transparent:true,
                                             opacity:0.8,
                                             blending:THREE.AdditiveBlending
                                         }),
                                         new THREE.MeshBasicMaterial({
-                                            color:'#0C8965',//内部颜色
+                                            color:'#000000',//内部颜色
                                             transparent:true,
-                                            opacity:0.35,
+                                            opacity:0.55,
                                             blending:THREE.AdditiveBlending
                                         }),
                                     ]
@@ -331,7 +331,7 @@ import { element } from 'three/examples/jsm/nodes/Nodes.js';
 </script>
 <style>
 .main{
-    width: 100%;
-    height: 100%;
+    width: inherit;
+    height: inherit;
 }
 </style>

@@ -1,55 +1,99 @@
 <template>
-  <div class="common-layout">
-    <div class="sidebox" style="border-bottom-left-radius:30px">
-      <div class="boxInSide1"></div>
-      <div class="boxInSide2" style="border-bottom-left-radius:30px"></div>
-    </div>
-    <div class="mainbox" >
-      <threeMap></threeMap>
-    </div>
-    <div class="sidebox" style="float: right;border-bottom-right-radius:30px">
-      <div class="boxInSide1"></div>
-      <div class="boxInSide2"style="border-bottom-right-radius:30px"></div>
-    </div>
-  </div>
+<el-container style="width: 100%;height: 730px;">
+  <el-main>
+    <threeMap></threeMap>
+
+    <!-- 左边框 -->
+    <el-row class="sidebox1">
+      <el-col :span="24"><div class="ChiYun" >慈云</div></el-col>
+      <el-col :span="24"><div class="titleCartogram"></div></el-col>
+      <el-col :span="24"><div class="cartogram">统计图</div></el-col>
+    </el-row>
+    
+    <!-- 右边框 -->
+    <el-row class="sidebox2">
+      <el-col :span="24"><div class="textTitle">名称</div></el-col>
+      <el-col :span="24"><div class="textbox"></div></el-col>
+      <el-col :span="24"><div class="textbox" style="border-top-left-radius:10px;border-top-right-radius:10px;"></div></el-col>
+    </el-row>
+  </el-main>
+</el-container>
+
 </template>
 
 <script setup>
 import threeMap from './components/threeMap.vue';
+import {useSenceStore} from './stores/useScenicSpot.ts'
+
+const sence=useSenceStore();
 
 </script>
 
 
 <style>
-.title{
-  height: 50px; 
-  text-align: center; 
-  background-color: beige;
-  border-top-left-radius: 30px ;
-  border-top-right-radius: 30px ;
-}
-.common-layout{
+/* 左边框 */
+.sidebox1{
+  top: 50px;
+  height: 650px;
+  width: 270px;
+  /* background-color: darkcyan; */
   position: absolute;
-  width: 100%;
-  display: flex;
+  opacity:0.5;
+  left: 30px;
 }
-.sidebox{
-  height: 680px;
-  width: 15%;
-  background-color: darkcyan;
-  float: left;
+/* 右边框 */
+.sidebox2{
+  top: 50px;
+  height: 650px;
+  width: 270px;
+  /* background-color: rgb(29, 239, 131); */
+  position: absolute;
+  opacity:0.5;
+  float: right;
+  right: 30px;
+  box-shadow: 12px 12px 12px 0 rgba(0, 0, 0, 0.1)
 }
-.mainbox{
-  background-color: rgb(70, 233, 151);
-  flex: 1;
-  float: left;
+/* 词云框 */
+.ChiYun{
+  width: inherit;
+  height: 250px;
+  text-align: center;
+  background-color:#DCDFE6;
+  border-radius: 6px;
+  box-shadow: 12px 12px 12px 0 rgba(0, 0, 0, 0.1)
 }
-.boxInSide1{
-  height: 50%;
-  background-color: aquamarine;
+/* 统计图标题 */
+.titleCartogram{
+  width: inherit;
+  height: 20px;
+  /* background-color:#409EFF; */
+  margin-top: 10px;
+  text-align: center;
+  border-top-left-radius:4px;
+  border-top-right-radius:4px;
 }
-.boxInSide2{
-  height: 50%;
-  background-color: rgb(178, 216, 249);
+/* 统计图 */
+.cartogram{
+  width: inherit;
+  height: 370px;
+  background-color:#DCDFE6;
+  border-bottom-left-radius:4px;
+  border-bottom-right-radius:4px;
+  box-shadow: 12px 12px 12px 0 rgba(0, 0, 0, 0.1)
+}
+.textTitle{
+  width: inherit;
+  height: 20px;
+  top:100px;
+  text-align: center;
+  background-color: #409EFF;
+  border-top-left-radius:10px;
+  border-top-right-radius:10px;
+}
+.textbox{
+  width: inherit;
+  height: 320px;
+  background-color:#E4E7ED;
+  border-radius: 6px;
 }
 </style>
