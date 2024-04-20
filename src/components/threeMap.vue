@@ -9,15 +9,18 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import * as d3 from "d3";
     import { element } from 'three/examples/jsm/nodes/Nodes.js';
+    import {useSenceStore} from '@/stores/useScenicSpot';
 
-
+    //读取景点数据
+    let data=useSenceStore();
+    // console.log(data.chinaScenic)
 
     //因为setup先于挂载，将获取容器的操作放到setup里会出现div还没出现就查找div的情况，所有将渲染器放到容器的操作放到完成挂载后执行
     onMounted(()=>{
         document.getElementById('vessal')?.appendChild( renderer.domElement );
         animate();
         loadmap();//创建中国地图
-        // addAmbientLight(0.55);
+        addAmbientLight(0.55);
         addEventListener('mousemove',mouseEmphasizeEvent);
         addEventListener('click',mouseClickEvent);
     })
@@ -96,6 +99,7 @@
         coordinate:any,
         center:number[]
     }
+
     let provinceShape:province[]=[];//在createmap方法调用时，即创建中国地图时存放各个身份的名称、边界坐标和中心坐标
 
     //创建地图，通过读取geojosn数据获得每一个坐标点数据，放到
@@ -171,6 +175,34 @@
                         provinceShape.push(p);//将省份的polygon和名称存入数组
                 })
             }
+
+            //添加景点数据
+            data.chinaScenic.forEach((element1)=>{//遍历省份
+                let pro_attractions_obj=new THREE.Object3D();//用于存放每一个省份的地图对象
+                element1.attractions.forEach((point)=>{//遍历省份的景点
+                    let z=projection([point.coordinate[0],point.coordinate[1]]);
+                    const map= new THREE.TextureLoader().load('src/assets/3.png');
+                    let materrialPoint=new THREE.SpriteMaterial({
+                        map:map,
+                        transparent:true,
+                        depthWrite:false,
+                        depthTest:true,
+                        blending:THREE.AdditiveBlending,
+                        color:'#67C23A'
+                    })
+                    let sprite=new THREE.Sprite(materrialPoint);
+                    if(z){
+                        sprite.position.set(z[0],-z[1],6)
+                    }
+                    sprite.name=point.name;
+                    pro_attractions_obj.add(sprite);
+                })
+                // console.log(pro_attractions_obj);
+                pro_attractions_obj.name=element1.name;
+                chinaobj.add(pro_attractions_obj);
+            })
+
+
             chinaobj.add(provinceobj);
         });
          scene.add(chinaobj);//把地图添加到创建，在创建缓冲几何体时，线会被添加进chinaobj
@@ -184,7 +216,7 @@
             new THREE.MeshBasicMaterial({
                 color:'#606266',//外部颜色
                 transparent:true,
-                opacity:1,
+                opacity:0.6,
                 blending:THREE.AdditiveBlending
             }),
             new THREE.MeshBasicMaterial({
@@ -231,7 +263,7 @@
         raycaster.setFromCamera(mouse, camera);
         // 计算物体和射线的焦点
         const intersects = raycaster.intersectObjects(scene.children, true);
-        // console.log(intersects)
+        // console.log(intersects[0].object)
         cuurrentObj
           ? cuurrentObj.object.scale.set(1, 1, 1)
           : (cuurrentObj = null);
@@ -272,14 +304,46 @@
                             isDisplayAlone=true;
                             scene.remove(chinaobj);
                             //创建居中的省份
+                            let modelcenter:number[]=[];//记录模型中心坐标
+
+                            //创建景点模型
+                            data.chinaScenic.forEach((element1)=>{//遍历省份
+                                modelcenter=element1.center;
+                                if(element1.name==cuurrentObjClick.object.name){
+                                    element1.attractions.forEach((point)=>{//遍历省份的景点
+                                        const projectionAlone=d3
+                                        .geoMercator()
+                                        .scale(200)
+                                        .center([modelcenter[0],modelcenter[1]])
+                                        .translate([0,0])
+                                        let z=projectionAlone([point.coordinate[0],point.coordinate[1]]);
+                                        const map= new THREE.TextureLoader().load('src/assets/3.png');
+                                        let materrialPoint=new THREE.SpriteMaterial({
+                                            map:map,
+                                            transparent:true,
+                                            depthWrite:false,
+                                            depthTest:true,
+                                            blending:THREE.AdditiveBlending,
+                                            
+                                        })
+                                        let sprite=new THREE.Sprite(materrialPoint);
+                                        if(z){
+                                            sprite.position.set(z[0],-z[1],6)
+                                        }
+                                        scene.add(sprite)
+                                    })
+                                }
+                            })
+
                             provinceShape.forEach((element:province)=>{
                                 if(element.name==cuurrentObjClick.object.name){
+                                    modelcenter=element.center;
                                     const projectionAlone=d3
                                         .geoMercator()
                                         .scale(200)
-                                        .center([element.center[0],element.center[1]])
+                                        .center([modelcenter[0],modelcenter[1]])
                                         .translate([0,0])
-
+                                    //创建省份模型
                                     const shape = new THREE.Shape();
                                     element.coordinate.forEach((coord:any,index:number)=>{//遍历每一个单面体的坐标
                                         let z=projectionAlone(coord);
@@ -312,7 +376,7 @@
                                     }
                                     const geometry = new THREE.ExtrudeGeometry( shape ,extrudeSettings);
                                     const mesh = new THREE.Mesh( geometry, meshmaterrial ) ;
-                                    scene.add(mesh);  
+                                    scene.add(mesh);   
                                 }
                             })
                         }
@@ -328,6 +392,8 @@
                 }
             }
       };
+    
+    
 </script>
 <style>
 .main{

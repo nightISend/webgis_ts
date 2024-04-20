@@ -28,7 +28,7 @@ import Statistics from './views/Statistics.vue'
 import wordcloud from './views/wordcloud.vue'
 
 const sence=useSenceStore();
-
+// console.log(sence.chinaScenic)
 </script>
 
 
