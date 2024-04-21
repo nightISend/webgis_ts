@@ -16,7 +16,15 @@
     <el-row class="sidebox2">
       <el-col :span="24"><div class="textTitle">{{ entity.name }}<el-button id="next" type="primary" >下一个</el-button></div></el-col>
       <el-col :span="24"><div class="textbox">{{ entity.content }}</div></el-col>
-      <el-col :span="24"><div class="textbox" style="border-top-left-radius:10px;border-top-right-radius:10px;"></div></el-col>
+      <el-col :span="24">
+        <div class="textbox" style="border-top-left-radius:10px;border-top-right-radius:10px;">
+          <el-carousel height="150px">
+            <el-carousel-item v-for="item in entity.pictures" :key="item">
+              <img :src="item" class="image">
+            </el-carousel-item>
+        </el-carousel>
+      </div>
+    </el-col>
     </el-row>
   </el-main>
 </el-container>

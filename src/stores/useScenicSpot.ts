@@ -6,9 +6,10 @@ import { ref,reactive } from 'vue'
 type spot={
    "name":string,
    "coordinate":number[],
-   "statistic":number[],
+   "statistic":number[],//单位万
    "content":string,
-   "wardcloud":any
+   "wardcloud":any,
+   "picture":string[]
 }
 
 //定义省份的数据结构
@@ -21,10 +22,7 @@ type province={
 
 export const useSenceStore = defineStore('ScenicStore', () => {
 
-  let provinceName=ref("中国");
-  let spotName=ref();
-
-
+   //中国数据
    const chinaData= {"name":'中国',
       "attractions":{
          "name":"中国",
@@ -49,9 +47,12 @@ export const useSenceStore = defineStore('ScenicStore', () => {
          {name:"明清皇家陵寝",value:1},
          {name:"都江堰",value:3},
          {name:"皖南古村落",value:2},],
-         "statistic":[1100,1200,1300,1111,1003,1233,1333,1245,1833,1444,1234,1111]
+         "statistic":[1100,1200,1300,1111,1003,1233,1333,1245,1833,1444,1234,1111],
+         "pictures":["src/assets/picture/中国_1.jpg","src/assets/picture/中国_2.jpg"]
       }
    }
+
+   //省份及其景点数据
     const chinaScenic:province[] = [
          {"name":'北京市',
          "center":[116.388,39.9075],
@@ -61,14 +62,16 @@ export const useSenceStore = defineStore('ScenicStore', () => {
                "statistic":[91, 81, 70, 78, 81, 88, 90,
                    98, 97, 100, 90,],
                "content":"这是长城的内容",
-               "wardcloud":[{name:"长城词云",value:5}]
+               "wardcloud":[{name:"长城词云",value:5}],
+               "picture":[]
             },{
                "name":"周口店北京猿人遗址",
                "coordinate":[115.85000,39.68333],
                "statistic":[10, 9, 9, 10, 10, 9, 12, 13, 
                   10,9, 10, 9],
                "content":"这是周口店北京猿人遗址的内容",
-               "wardcloud":[{name:"周口店北京猿人遗址词云",value:5}]
+               "wardcloud":[{name:"周口店北京猿人遗址词云",value:5}],
+               "picture":[]
             }]
          },
          {"name":'浙江省',
@@ -79,21 +82,24 @@ export const useSenceStore = defineStore('ScenicStore', () => {
                "statistic":[72, 73, 83, 94, 104, 124, 136, 147,
                   138, 107, 116, 104],
                "content":"这是周中国大运河的内容",
-               "wardcloud":[{name:"大运河词云",value:5}]
+               "wardcloud":[{name:"大运河词云",value:5}],
+               "picture":[]
             },{
                "name":"良渚古城遗址",
                "coordinate":[30.40736,120.02889],
                "statistic":[26, 26, 27, 26, 26, 27, 27, 27, 27,
                   27, 27, 26],
                "content":"这是良渚古城遗址的内容",
-               "wardcloud":[{name:"良渚词云",value:5}]
+               "wardcloud":[{name:"良渚词云",value:5}],
+               "picture":[]
             },{
                "name":"杭州西湖",
                "coordinate":[30.2469944,120.144167],
                "statistic":[504, 510, 509, 512, 510, 512, 516, 524,
                   532, 520, 526, 512],
                "content":"这是杭州西湖的内容",
-               "wardcloud":[{name:"西湖词云",value:5}]
+               "wardcloud":[{name:"西湖词云",value:5}],
+               "picture":[]
             }]
          },
          {"name":'河南省',
@@ -104,21 +110,24 @@ export const useSenceStore = defineStore('ScenicStore', () => {
             "statistic":[49, 48, 47, 49, 48, 50, 54, 56, 52,
                51, 57, 50],
             "content":"这是龙门石窟的内容",
-            "wardcloud":[{name:"龙马石窟词云",value:5}]
+            "wardcloud":[{name:"龙马石窟词云",value:5}],
+            "picture":[]
          },{
             "name":"安阳殷墟",
             "coordinate":[114.313889,36.126667],
             "statistic":[150, 149, 150, 148, 149, 152, 153, 155,
                156, 153, 155, 152],
             "content":"这是安阳殷墟的内容",
-            "wardcloud":[{name:"安阳殷墟词云",value:5}]
+            "wardcloud":[{name:"安阳殷墟词云",value:5}],
+            "picture":[]
          },{
             "name":"登封“天地之中”历史建筑群",
             "coordinate":[112.935514,34.435],
             "statistic":[30, 29, 30, 29, 28, 29, 32, 33, 35,
                32, 34, 32],
             "content":"这是登封“天地之中”历史建筑群的内容",
-            "wardcloud":[{name:"天地之中词云",value:5}]
+            "wardcloud":[{name:"天地之中词云",value:5}],
+            "picture":[]
          }]
          },
     ]
