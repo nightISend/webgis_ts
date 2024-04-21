@@ -77,14 +77,14 @@ export const useSenceStore = defineStore('ScenicStore', () => {
                "name":"中国大运河",
                "coordinate":[120.214791,30.491037],
                "statistic":[72, 73, 83, 94, 104, 124, 136, 147,
-                  1381250, 107, 116, 104],
+                  138, 107, 116, 104],
                "content":"这是周中国大运河的内容",
                "wardcloud":[{name:"大运河词云",value:5}]
             },{
                "name":"良渚古城遗址",
                "coordinate":[30.40736,120.02889],
                "statistic":[26, 26, 27, 26, 26, 27, 27, 27, 27,
-                  27, 273, 26],
+                  27, 27, 26],
                "content":"这是良渚古城遗址的内容",
                "wardcloud":[{name:"良渚词云",value:5}]
             },{

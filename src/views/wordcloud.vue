@@ -22,7 +22,7 @@ onMounted(()=>{
     watch(
         () => data.i,
         (newValue, oldValue) => {
-            console.log("词云监听到数据变化")
+            // console.log("词云监听到数据变化")
             console.log(data.temperment[data.i].wardcloud)
             option.series[0].data=data.temperment[data.i].wardcloud
             chart.setOption(option,true)

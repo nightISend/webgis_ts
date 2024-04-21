@@ -339,7 +339,7 @@
                                         }
                                         scene.add(sprite)
                                     })
-                                    console.log(data.temperment[data.i].content)
+                                    // console.log(data.temperment[data.i].content)
                                 }
                             })
 
