@@ -4,27 +4,33 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted }  from 'vue';
+import { onMounted, watch }  from 'vue';
 import * as echarts from 'echarts';
 import 'echarts-wordcloud';
+import {useSenceStore} from '@/stores/useScenicSpot';
+
+const data=useSenceStore();
+// console.log(data.temperment[data.i].attractions.wardcloud);
 
 onMounted(()=>{
     var chart = echarts.init(document.getElementById('wordcloud'));
-    chart.setOption(option);
+    chart.setOption(option,true);
     window.addEventListener("resize", function() {
         chart.resize();
     });
+
+    watch(
+        () => data.i,
+        (newValue, oldValue) => {
+            console.log("词云监听到数据变化")
+            console.log(data.temperment[data.i].wardcloud)
+            option.series[0].data=data.temperment[data.i].wardcloud
+            chart.setOption(option,true)
+        },
+        { deep: true }
+    )
 })
 
-var keywords = [{"name":"男神","value":2.64},
-                {"name":"好身材","value":4.03},
-                {"name":"校草","value":24.95},
-                {"name":"酷","value":4.04},
-                {"name":"时尚","value":5.27},
-                {"name":"阳光活力","value":5.80},
-                {"name":"初恋","value":3.09},
-                {"name":"英俊潇洒","value":24.71}
-            ];
             var option = {
                     series: [{
                         type: 'wordCloud',
@@ -53,7 +59,7 @@ var keywords = [{"name":"男神","value":2.64},
                                 shadowColor: '#333'
                             }
                         },
-                        data: keywords
+                        data: data.chinaData.attractions.wardcloud
                     }]
                 };
 </script>

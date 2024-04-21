@@ -20,7 +20,7 @@
         document.getElementById('vessal')?.appendChild( renderer.domElement );
         animate();
         loadmap();//创建中国地图
-        addAmbientLight(0.55);
+        // addAmbientLight(0.55);
         addEventListener('mousemove',mouseEmphasizeEvent);
         addEventListener('click',mouseClickEvent);
     })
@@ -185,6 +185,7 @@
                     let materrialPoint=new THREE.SpriteMaterial({
                         map:map,
                         transparent:true,
+                        opacity:0.1,
                         depthWrite:false,
                         depthTest:true,
                         blending:THREE.AdditiveBlending,
@@ -310,7 +311,13 @@
                             data.chinaScenic.forEach((element1)=>{//遍历省份
                                 modelcenter=element1.center;
                                 if(element1.name==cuurrentObjClick.object.name){
+
+                                    data.temperment=[];//清空暂存
+
                                     element1.attractions.forEach((point)=>{//遍历省份的景点
+
+                                        data.temperment.push(point);//添加景点数据到暂存空间
+
                                         const projectionAlone=d3
                                         .geoMercator()
                                         .scale(200)
@@ -332,6 +339,7 @@
                                         }
                                         scene.add(sprite)
                                     })
+                                    console.log(data.temperment[data.i].content)
                                 }
                             })
 

@@ -5,7 +5,11 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts';
-import { onMounted } from 'vue';
+import { onMounted ,watch} from 'vue';
+import {useSenceStore} from '@/stores/useScenicSpot';
+import { any } from 'three/examples/jsm/nodes/Nodes.js';
+
+const data=useSenceStore();
 
 onMounted(()=>{
   var chartDom = document.getElementById('statistic')!;
@@ -13,11 +17,43 @@ onMounted(()=>{
   option && myChart.setOption(option);
 
   window.addEventListener("resize", () => {
-                myChart.resize();
-            });
+    myChart.resize();
+  });
+
+
+  watch(
+        () => data.i,
+        (newValue, oldValue) => {
+            console.log("统计图监听到数据变化")
+            console.log(data.temperment[data.i].statistic)
+            let s2=bite(data.temperment[data.i].statistic)
+            console.log(option.series)
+            option.series[1].data=bite(data.temperment[data.i].statistic);
+            option.series[0].data=data.temperment[data.i].statistic;
+            myChart.setOption(option,true)
+        },
+        { deep: true }
+    )
 })
 type EChartsOption = echarts.EChartsOption;
 var option: EChartsOption;
+
+
+
+
+//计算比率
+function bite(element:number[]){
+  let bite_array=[];
+  for(let i=0;i<element.length;i++){
+    if(i==0){
+      bite_array.push(0);
+    }
+    else{
+      bite_array.push((element[i]-element[i-1])/element[i]*100);
+    }
+  }
+  return bite_array;
+}
 
 option = {
   tooltip: {
@@ -38,12 +74,12 @@ option = {
     }
   },
   legend: {
-    data: ['Evaporation', 'Temperature']
+    data: ['客流量', '增长比']
   },
   xAxis: [
     {
       type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月','8月','9月','10月','11月','12月'],
       axisPointer: {
         type: 'shadow'
       }
@@ -52,48 +88,46 @@ option = {
   yAxis: [
     {
       type: 'value',
-      name: 'Precipitation',
+      name: '客流量',
       min: 0,
-      max: 250,
-      interval: 50,
+      max: 1500,
+      interval: 200,
       axisLabel: {
-        formatter: '{value} ml'
+        formatter: '{value} 万人'
       }
     },
     {
       type: 'value',
-      name: 'Temperature',
-      min: 0,
-      max: 25,
-      interval: 5,
+      name: '增长比',
+      min: -50,
+      max: 100,
+      interval: 20,
       axisLabel: {
-        formatter: '{value} °C'
+        formatter: '{value} %'
       }
     }
   ],
   series: [
     {
-      name: 'Evaporation',
+      name: '客流量',
       type: 'bar',
       tooltip: {
         valueFormatter: function (value) {
           return (value as number) + ' ml';
         }
       },
-      data: [
-        2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-      ]
+      data:data.chinaData.attractions.statistic
     },
     {
-      name: 'Temperature',
+      name: '增长比',
       type: 'line',
       yAxisIndex: 1,
       tooltip: {
         valueFormatter: function (value) {
-          return (value as number) + ' °C';
+          return (value as number) + ' %';
         }
       },
-      data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+      data: bite(data.chinaData.attractions.statistic)
     }
   ]
 };
