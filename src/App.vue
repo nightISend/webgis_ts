@@ -14,16 +14,16 @@
     
     <!-- 右边框 -->
     <el-row class="sidebox2">
-      <el-col :span="24"><div class="textTitle">{{ entity.name }}<el-button id="next" type="primary" >下一个</el-button></div></el-col>
-      <el-col :span="24"><div class="textbox">{{ entity.content }}</div></el-col>
-      <el-col :span="24">
-        <div class="textbox" style="border-top-left-radius:10px;border-top-right-radius:10px;">
-          <el-carousel height="150px">
-            <el-carousel-item v-for="item in entity.pictures" :key="item">
+      <el-col :span="24" class="textTitle">{{ entity.name }}</el-col>
+      <el-col :span="24" class="textbox"><p class="fontClass">{{ entity.content }}</p>
+        <el-button id="next" type="primary" style="float: right;" >下一个<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+      </el-col>
+      <el-col :span="24" class="picture">
+          <el-carousel height="250px">
+            <el-carousel-item v-for="item in entity.pictures" :key="item" >
               <img :src="item" class="image">
             </el-carousel-item>
         </el-carousel>
-      </div>
     </el-col>
     </el-row>
   </el-main>
@@ -47,7 +47,7 @@ onMounted(()=>{
   document.getElementById("next")?.addEventListener("click",nextclick);
 
   watch(
-        () => data.i,
+        () => [data.i,data.temperment],
         (newValue, oldValue) => {
           // console.log('app.vue 发现变动')
           entity.value=data.temperment[data.i];
@@ -60,11 +60,9 @@ onMounted(()=>{
 function nextclick(){
     if(data.i+1<data.temperment.length){
       data.i+=1;
-      console.log(data.i)
     }
     else{
       data.i=0;
-      console.log(data.i)
     }
   }
 </script>
@@ -85,7 +83,7 @@ function nextclick(){
 .sidebox2{
   top: 50px;
   height: 650px;
-  width: 270px;
+  width: 300px;
   /* background-color: rgb(29, 239, 131); */
   position: absolute;
   opacity:0.5;
@@ -124,19 +122,39 @@ function nextclick(){
 }
 /* 右框标题 */
 .textTitle{
-  width: inherit;
-  height: 20px;
+  width: 90%;
+  height: 30px;
   top:100px;
   text-align: center;
-  background-color: #409EFF;
+  background-color: #909399;
   border-top-left-radius:10px;
   border-top-right-radius:10px;
+  float: right;
 }
-/* 右文本及图片框 */
+/* 右文本 */
 .textbox{
-  width: inherit;
-  height: 320px;
+  width: 90%;
+  height: 350px;
   background-color:#E4E7ED;
   border-radius: 6px;
+  float: right;
+}
+/* 字体 */
+.fontClass{
+font-size:15px;
+font-family: Arial,sans-serif;
+color: #303133;
+}
+/* 图片框 */
+.picture{
+  width: inherit;
+  height: 250px;
+  background-color:#E4E7ED;
+  border-radius: 10px;
+}
+/* 走马灯 */
+.image{
+  max-width: 100%;
+  height: auto;
 }
 </style>

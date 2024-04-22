@@ -21,7 +21,7 @@ onMounted(()=>{
 
 
   watch(
-        () => data.i,
+        () => [data.i,data.temperment],
         (newValue, oldValue) => {
             // console.log("统计图监听到数据变化")
             console.log(data.temperment[data.i].statistic)
@@ -68,10 +68,10 @@ option = {
   },
   toolbox: {
     feature: {
-      dataView: { show: true, readOnly: false },
-      magicType: { show: true, type: ['line', 'bar'] },
-      restore: { show: true },
-      saveAsImage: { show: true }
+      dataView: { show: false, readOnly: false },
+      magicType: { show: false, type: ['line', 'bar'] },
+      restore: { show: false },
+      saveAsImage: { show: false }
     }
   },
   legend: {
@@ -146,10 +146,10 @@ option_china = {
   },
   toolbox: {
     feature: {
-      dataView: { show: true, readOnly: false },
-      magicType: { show: true, type: ['line', 'bar'] },
-      restore: { show: true },
-      saveAsImage: { show: true }
+      dataView: { show: false, readOnly: false },
+      magicType: { show: false, type: ['line', 'bar'] },
+      restore: { show: false },
+      saveAsImage: { show: false }
     }
   },
   legend: {

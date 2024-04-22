@@ -20,7 +20,7 @@ onMounted(()=>{
     });
 
     watch(
-        () => data.i,
+        () => [data.i,data.temperment],
         (newValue, oldValue) => {
             // console.log("词云监听到数据变化")
             console.log(data.temperment[data.i].wardcloud)

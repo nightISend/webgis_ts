@@ -9,7 +9,7 @@ type spot={
    "statistic":number[],//单位万
    "content":string,
    "wardcloud":any,
-   "picture":string[]
+   "pictures":string[]
 }
 
 //定义省份的数据结构
@@ -63,7 +63,7 @@ export const useSenceStore = defineStore('ScenicStore', () => {
                    98, 97, 100, 90,],
                "content":"这是长城的内容",
                "wardcloud":[{name:"长城词云",value:5}],
-               "picture":[]
+               "pictures":[]
             },{
                "name":"周口店北京猿人遗址",
                "coordinate":[115.85000,39.68333],
@@ -71,7 +71,7 @@ export const useSenceStore = defineStore('ScenicStore', () => {
                   10,9, 10, 9],
                "content":"这是周口店北京猿人遗址的内容",
                "wardcloud":[{name:"周口店北京猿人遗址词云",value:5}],
-               "picture":[]
+               "pictures":[]
             }]
          },
          {"name":'浙江省',
@@ -83,7 +83,7 @@ export const useSenceStore = defineStore('ScenicStore', () => {
                   138, 107, 116, 104],
                "content":"这是周中国大运河的内容",
                "wardcloud":[{name:"大运河词云",value:5}],
-               "picture":[]
+               "pictures":[]
             },{
                "name":"良渚古城遗址",
                "coordinate":[30.40736,120.02889],
@@ -91,7 +91,7 @@ export const useSenceStore = defineStore('ScenicStore', () => {
                   27, 27, 26],
                "content":"这是良渚古城遗址的内容",
                "wardcloud":[{name:"良渚词云",value:5}],
-               "picture":[]
+               "pictures":[]
             },{
                "name":"杭州西湖",
                "coordinate":[30.2469944,120.144167],
@@ -99,7 +99,7 @@ export const useSenceStore = defineStore('ScenicStore', () => {
                   532, 520, 526, 512],
                "content":"这是杭州西湖的内容",
                "wardcloud":[{name:"西湖词云",value:5}],
-               "picture":[]
+               "pictures":[]
             }]
          },
          {"name":'河南省',
@@ -111,7 +111,7 @@ export const useSenceStore = defineStore('ScenicStore', () => {
                51, 57, 50],
             "content":"这是龙门石窟的内容",
             "wardcloud":[{name:"龙马石窟词云",value:5}],
-            "picture":[]
+            "pictures":["src/assets/picture/中国_1.jpg","src/assets/picture/中国_2.jpg"]
          },{
             "name":"安阳殷墟",
             "coordinate":[114.313889,36.126667],
@@ -119,7 +119,7 @@ export const useSenceStore = defineStore('ScenicStore', () => {
                156, 153, 155, 152],
             "content":"这是安阳殷墟的内容",
             "wardcloud":[{name:"安阳殷墟词云",value:5}],
-            "picture":[]
+            "pictures":[]
          },{
             "name":"登封“天地之中”历史建筑群",
             "coordinate":[112.935514,34.435],
@@ -127,7 +127,7 @@ export const useSenceStore = defineStore('ScenicStore', () => {
                32, 34, 32],
             "content":"这是登封“天地之中”历史建筑群的内容",
             "wardcloud":[{name:"天地之中词云",value:5}],
-            "picture":[]
+            "pictures":[]
          }]
          },
     ]
