@@ -114,7 +114,7 @@ option = {
       type: 'bar',
       tooltip: {
         valueFormatter: function (value) {
-          return (value as number) + ' ml';
+          return (value as number) + ' 万人';
         }
       },
       data:data.chinaData.attractions.statistic
@@ -192,7 +192,7 @@ option_china = {
       type: 'bar',
       tooltip: {
         valueFormatter: function (value) {
-          return (value as number) + ' ml';
+          return (value as number) + ' 亿';
         }
       },
       data:[12.16,11.68,12.9,12.17]

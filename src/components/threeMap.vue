@@ -20,7 +20,7 @@
         document.getElementById('vessal')?.appendChild( renderer.domElement );
         animate();
         loadmap();//创建中国地图
-        // addAmbientLight(0.55);
+        // addAmbientLight(0.1);
         addEventListener('mousemove',mouseEmphasizeEvent);
         addEventListener('click',mouseClickEvent);
     })
@@ -34,7 +34,7 @@
 
     //创建渲染器并设置渲染器的尺寸
     const renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor('#EBEEF5',0.3)
+    renderer.setClearColor('#EBEEF5',0.1)
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setPixelRatio(window.devicePixelRatio);//使模型更清晰
 
@@ -185,11 +185,10 @@
                     let materrialPoint=new THREE.SpriteMaterial({
                         map:map,
                         transparent:true,
-                        opacity:0.1,
                         depthWrite:false,
                         depthTest:true,
                         blending:THREE.AdditiveBlending,
-                        color:'#67C23A'
+                        color:'#E6A23C'
                     })
                     let sprite=new THREE.Sprite(materrialPoint);
                     if(z){
@@ -215,15 +214,15 @@
         //地图材质的参数
         let meshmaterrial=[
             new THREE.MeshBasicMaterial({
-                color:'#606266',//外部颜色
-                transparent:true,
-                opacity:0.6,
+                color:'#67C23A',//外部颜色
+                transparent:false,
+                opacity:0.8,
                 blending:THREE.AdditiveBlending
             }),
             new THREE.MeshBasicMaterial({
                 color:'#000000',//内部颜色
-                transparent:true,
-                opacity:1,
+                transparent:false,
+                // opacity:1,
                 blending:THREE.AdditiveBlending
             }),
         ]
@@ -331,7 +330,7 @@
                                             depthWrite:false,
                                             depthTest:true,
                                             blending:THREE.AdditiveBlending,
-                                            
+                                            color:'#E6A23C'
                                         })
                                         let sprite=new THREE.Sprite(materrialPoint);
                                         if(z){
@@ -367,14 +366,14 @@
                                     let meshmaterrial=[
                                         new THREE.MeshBasicMaterial({
                                             color:'#606266',//外部颜色
-                                            transparent:true,
-                                            opacity:0.8,
+                                            transparent:false,
+                                            // opacity:0.8,
                                             blending:THREE.AdditiveBlending
                                         }),
                                         new THREE.MeshBasicMaterial({
-                                            color:'#000000',//内部颜色
-                                            transparent:true,
-                                            opacity:0.55,
+                                            color:'#909399',//内部颜色
+                                            transparent:false,
+                                            // opacity:0.55,
                                             blending:THREE.AdditiveBlending
                                         }),
                                     ]
