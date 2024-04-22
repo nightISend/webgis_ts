@@ -76,7 +76,6 @@ function nextclick(){
   width: 400px;
   /* background-color: darkcyan; */
   position: absolute;
-  opacity:0.5;
   left: 30px;
 }
 /* 右边框 */
@@ -86,7 +85,6 @@ function nextclick(){
   width: 300px;
   /* background-color: rgb(29, 239, 131); */
   position: absolute;
-  opacity:0.5;
   float: right;
   right: 30px;
   box-shadow: 12px 12px 12px 0 rgba(0, 0, 0, 0.1)
@@ -98,6 +96,7 @@ function nextclick(){
   text-align: center;
   background-color:#DCDFE6;
   border-radius: 6px;
+  opacity:0.8;
   box-shadow: 12px 12px 12px 0 rgba(0, 0, 0, 0.1)
 }
 /* 统计图标题 */
@@ -115,7 +114,7 @@ function nextclick(){
   width: inherit;
   height: 330px;
   background-color:#DCDFE6;
-  opacity:1;
+  opacity:0.8;
   border-radius:4px;
   /* border-bottom-right-radius:4px; */
   box-shadow: 12px 12px 12px 0 rgba(0, 0, 0, 0.1);
@@ -125,6 +124,7 @@ function nextclick(){
   width: 90%;
   height: 30px;
   top:100px;
+  opacity:0.8;
   text-align: center;
   background-color: #909399;
   border-top-left-radius:10px;
@@ -136,6 +136,7 @@ function nextclick(){
   width: 90%;
   height: 350px;
   background-color:#E4E7ED;
+  opacity:0.8;
   border-radius: 6px;
   float: right;
 }
@@ -151,6 +152,7 @@ color: #303133;
   height: 250px;
   background-color:#E4E7ED;
   border-radius: 10px;
+  opacity:0.8;
 }
 /* 走马灯 */
 .image{

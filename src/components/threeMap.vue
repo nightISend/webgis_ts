@@ -20,12 +20,16 @@
         document.getElementById('vessal')?.appendChild( renderer.domElement );
         animate();
         loadmap();//创建中国地图
-        // addAmbientLight(0.1);
+        addAmbientLight(0.1);
         addEventListener('mousemove',mouseEmphasizeEvent);
         addEventListener('click',mouseClickEvent);
     })
 
     const scene = new THREE.Scene();
+    const textureLoader = new THREE.TextureLoader()
+    scene.background = textureLoader.load('src/assets/picture/图片.jpg')
+
+
     //透视摄像机.
     //第一个参数是视野角度（FOV）,表示能在显示器上看到的场景的范围，它的单位是角度(与弧度区分开)。75
     //第二个参数是长宽比（aspect ratio）。 也就是你用一个物体的宽除以它的高的值。window.innerWidth / window.innerHeight浏览器的长宽比
@@ -34,7 +38,7 @@
 
     //创建渲染器并设置渲染器的尺寸
     const renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor('#EBEEF5',0.1)
+    // renderer.setClearColor('#EBEEF5',0.1)
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setPixelRatio(window.devicePixelRatio);//使模型更清晰
 
@@ -214,15 +218,15 @@
         //地图材质的参数
         let meshmaterrial=[
             new THREE.MeshBasicMaterial({
-                color:'#67C23A',//外部颜色
+                color:'#303133',//外部颜色
                 transparent:false,
-                opacity:0.8,
+                // opacity:0.8,
                 blending:THREE.AdditiveBlending
             }),
             new THREE.MeshBasicMaterial({
-                color:'#000000',//内部颜色
+                color:'#909399',//内部颜色
                 transparent:false,
-                // opacity:1,
+                // opacity:0.55,
                 blending:THREE.AdditiveBlending
             }),
         ]
