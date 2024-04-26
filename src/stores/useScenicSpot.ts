@@ -54,16 +54,16 @@ export const useSenceStore = defineStore('ScenicStore', () => {
 
    //省份及其景点数据
     const chinaScenic:province[] = [
-         {"name":'北京市',
-         "center":[116.388,39.9075],
-            "attractions":[{
-               "name":"长城",
-               "coordinate":[117.23333,40.683333],
+         {"name":'北京市',//省名称
+         "center":[116.388,39.9075],//省中心
+            "attractions":[{//景点数组
+               "name":"长城",//景点名称
+               "coordinate":[117.23333,40.683333],//景点中心
                "statistic":[91, 81, 70, 78, 81, 88, 90,
-                   98, 97, 100, 90,],
-               "content":"这是长城的内容",
-               "wardcloud":[{name:"长城词云",value:5}],
-               "pictures":[]
+                   98, 97, 100, 90,],//客流量数据.单位万人
+               "content":"这是长城的内容",//要展示的文本内容
+               "wardcloud":[{name:"长城词云",value:5}],//词云
+               "pictures":["src/assets/picture/中国_1.jpg","src/assets/picture/中国_2.jpg"]//要展示的图片,可以放多个
             },{
                "name":"周口店北京猿人遗址",
                "coordinate":[115.85000,39.68333],
