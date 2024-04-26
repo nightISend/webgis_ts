@@ -26,7 +26,7 @@ onMounted(()=>{
             // console.log("统计图监听到数据变化")
             console.log(data.temperment[data.i].statistic)
             let s2=bite(data.temperment[data.i].statistic)
-            console.log(option.series)
+            // console.log(option.series)
             option.series[1].data=bite(data.temperment[data.i].statistic);
             option.series[0].data=data.temperment[data.i].statistic;
             myChart.setOption(option,true)
