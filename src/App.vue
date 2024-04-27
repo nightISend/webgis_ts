@@ -5,19 +5,31 @@
 
     <!-- 左边框 -->
     <el-row class="sidebox1">
+      <!-- 列表框 -->
+      <el-col :span="24" class="list">
+        <div style="width: 250px;height: 130px; background-color: #C1FCF6; float: left;border-radius: 10px;">
+          <li v-for="item in data.temperment" style="width: 90%;">
+            {{ item.name }}
+          </li>
+        </div>
+        <div style="width: 150px;height: 100px;float:right;">
+          <el-button id="next" type="primary" style="float: left;" >下一个</el-button>
+        </div>
+      </el-col>
       <!-- 词云 -->
       <el-col :span="24"><div class="ChiYun"><wordcloud></wordcloud></div></el-col>
-      <el-col :span="24"><div class="titleCartogram"></div></el-col>
       <!-- 统计图 -->
       <el-col :span="24"><div class="cartogram"><Statistics></Statistics></div></el-col>
     </el-row>
     
     <!-- 右边框 -->
     <el-row class="sidebox2">
+      <!-- 文本 -->
+      <!-- 标题 -->
       <el-col :span="24" class="textTitle">{{ entity.name }}</el-col>
       <el-col :span="24" class="textbox"><p class="fontClass">{{ entity.content }}</p>
-        <el-button id="next" type="primary" style="float: right;" >下一个<i class="el-icon-arrow-right el-icon--right"></i></el-button>
       </el-col>
+      <!-- 图片 -->
       <el-col :span="24" class="picture">
           <el-carousel height="250px">
             <el-carousel-item v-for="item in entity.pictures" :key="item" >
@@ -92,29 +104,26 @@ function nextclick(){
 /* 词云框 */
 .ChiYun{
   width: 80%;
-  height: 250px;
+  height: 240px;
   text-align: center;
-  background-color:#DCDFE6;
+  background-color:#98DCED;
   border-radius: 6px;
   opacity:0.8;
   box-shadow: 12px 12px 12px 0 rgba(0, 0, 0, 0.1)
 }
-/* 统计图标题 */
-.titleCartogram{
-  width: inherit;
-  height: 20px;
+/* 列表 */
+.list{
+  width: 300px;
+  height: 130px;
   /* background-color:#409EFF; */
-  margin-top: 10px;
-  text-align: center;
-  border-top-left-radius:4px;
-  border-top-right-radius:4px;
+  border-radius:12px;
 }
 /* 统计图 */
 .cartogram{
   width: inherit;
-  height: 330px;
-  background-color:#DCDFE6;
-  opacity:0.8;
+  height: 270px;
+  background-color:#98DCED;
+  opacity:0.9;
   border-radius:4px;
   /* border-bottom-right-radius:4px; */
   box-shadow: 12px 12px 12px 0 rgba(0, 0, 0, 0.1);
@@ -122,11 +131,11 @@ function nextclick(){
 /* 右框标题 */
 .textTitle{
   width: 90%;
-  height: 30px;
+  height: 20px;
   top:100px;
   opacity:0.8;
   text-align: center;
-  background-color: #909399;
+  background-color: #B2FFE8;
   border-top-left-radius:10px;
   border-top-right-radius:10px;
   float: right;
@@ -134,8 +143,8 @@ function nextclick(){
 /* 右文本 */
 .textbox{
   width: 90%;
-  height: 350px;
-  background-color:#E4E7ED;
+  height: 380px;
+  background-color:#98DCED;
   opacity:0.8;
   border-radius: 6px;
   float: right;
@@ -143,14 +152,14 @@ function nextclick(){
 /* 字体 */
 .fontClass{
 font-size:15px;
-font-family: Arial,sans-serif;
+font-family: Arial,SimSun ;
 color: #303133;
 }
 /* 图片框 */
 .picture{
   width: inherit;
   height: 250px;
-  background-color:#E4E7ED;
+  background-color:#84BAE0;
   border-radius: 10px;
   opacity:0.8;
 }

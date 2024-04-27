@@ -23,10 +23,6 @@ onMounted(()=>{
   watch(
         () => [data.i,data.temperment],
         (newValue, oldValue) => {
-            // console.log("统计图监听到数据变化")
-            console.log(data.temperment[data.i].statistic)
-            let s2=bite(data.temperment[data.i].statistic)
-            // console.log(option.series)
             option.series[1].data=bite(data.temperment[data.i].statistic);
             option.series[0].data=data.temperment[data.i].statistic;
             myChart.setOption(option,true)
@@ -94,7 +90,7 @@ option = {
       max: 600,
       interval: 200,
       axisLabel: {
-        formatter: '{value} 万人'
+        formatter: '{value}万人'
       }
     },
     {
@@ -104,7 +100,7 @@ option = {
       max: 100,
       interval: 20,
       axisLabel: {
-        formatter: '{value} %'
+        formatter: '{value}%'
       }
     }
   ],
@@ -114,7 +110,7 @@ option = {
       type: 'bar',
       tooltip: {
         valueFormatter: function (value) {
-          return (value as number) + ' 万人';
+          return (value as number) + '万人';
         }
       },
       data:data.chinaData.attractions.statistic
@@ -125,7 +121,7 @@ option = {
       yAxisIndex: 1,
       tooltip: {
         valueFormatter: function (value) {
-          return (value as number) + ' %';
+          return (value as number) + '%';
         }
       },
       data: bite(data.chinaData.attractions.statistic)

@@ -8,7 +8,6 @@
     import { onMounted } from 'vue';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import * as d3 from "d3";
-    import { element } from 'three/examples/jsm/nodes/Nodes.js';
     import {useSenceStore} from '@/stores/useScenicSpot';
 
     //读取景点数据
@@ -87,7 +86,7 @@
 
     }
 
-    //创建d3坐标
+    //创建d3坐标,用于中国完整地图
     const projection =d3
         .geoMercator()
         .scale(84)
@@ -97,7 +96,7 @@
     //创建用于存放3d地图工程
     let chinaobj=new THREE.Object3D()
     
-    //定义省份类型，用于存放省份的坐标和名称
+    //用于存放所有省份的坐标和名称
     type province={
         name:string,
         coordinate:any,
@@ -312,9 +311,9 @@
 
                             //创建景点模型
                             data.chinaScenic.forEach((element1)=>{//遍历省份
-                                modelcenter=element1.center;
+                                
                                 if(element1.name==cuurrentObjClick.object.name){
-
+                                    modelcenter=element1.center;
                                     data.temperment=[];//清空暂存
 
                                     element1.attractions.forEach((point)=>{//遍历省份的景点
@@ -348,7 +347,6 @@
 
                             provinceShape.forEach((element:province)=>{
                                 if(element.name==cuurrentObjClick.object.name){
-                                    modelcenter=element.center;
                                     const projectionAlone=d3
                                         .geoMercator()
                                         .scale(200)
