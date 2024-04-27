@@ -47,7 +47,7 @@ export const useSenceStore = defineStore('ScenicStore', () => {
          {name:"明清皇家陵寝",value:1},
          {name:"都江堰",value:3},
          {name:"皖南古村落",value:2},],
-         "statistic":[1100,1200,1300,1111,1003,1233,1333,1245,1833,1444,1234,1111],
+         "statistic":[1100,1200,1300,1111],
          "pictures":["src/assets/picture/中国_1.jpg","src/assets/picture/中国_2.jpg","src/assets/picture/中国_3.jpg","src/assets/picture/中国_4.jpg"]
       }
    }

@@ -7,8 +7,8 @@
     <el-row class="sidebox1">
       <!-- 列表框 -->
       <el-col :span="24" class="list">
-        <div style="width: 250px;height: 130px; background-color: #C1FCF6; float: left;border-radius: 10px;">
-          <li v-for="item in data.temperment" style="width: 90%;">
+        <div style="width: 250px;height: 130px; background-color: #C1FCF6; float: left;border-radius:10% 25%;">
+          <li v-for="item in data.temperment" style="width: 90%;font-family: Arial,SimSun ;">
             {{ item.name }}
           </li>
         </div>
@@ -107,7 +107,7 @@ function nextclick(){
   height: 240px;
   text-align: center;
   background-color:#98DCED;
-  border-radius: 6px;
+  border-radius: 30px;
   opacity:0.8;
   box-shadow: 12px 12px 12px 0 rgba(0, 0, 0, 0.1)
 }
@@ -117,6 +117,7 @@ function nextclick(){
   height: 130px;
   /* background-color:#409EFF; */
   border-radius:12px;
+  opacity:0.8;
 }
 /* 统计图 */
 .cartogram{
@@ -124,7 +125,7 @@ function nextclick(){
   height: 270px;
   background-color:#98DCED;
   opacity:0.9;
-  border-radius:4px;
+  border-radius: 10px 40px 40px 10px;;
   /* border-bottom-right-radius:4px; */
   box-shadow: 12px 12px 12px 0 rgba(0, 0, 0, 0.1);
 }
@@ -146,7 +147,8 @@ function nextclick(){
   height: 380px;
   background-color:#98DCED;
   opacity:0.8;
-  border-radius: 6px;
+  border-bottom-left-radius:15px;
+  border-bottom-right-radius:15px;
   float: right;
 }
 /* 字体 */

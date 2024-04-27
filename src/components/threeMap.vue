@@ -26,7 +26,7 @@
 
     const scene = new THREE.Scene();
     const textureLoader = new THREE.TextureLoader()
-    scene.background = textureLoader.load('src/assets/picture/图片.jpg')
+    scene.background = textureLoader.load('src/assets/picture/图片4.png')
 
 
     //透视摄像机.
@@ -100,10 +100,9 @@
     type province={
         name:string,
         coordinate:any,
-        center:number[]
     }
 
-    let provinceShape:province[]=[];//在createmap方法调用时，即创建中国地图时存放各个身份的名称、边界坐标和中心坐标
+    let provinceShape:province[]=[];//在createmap方法调用时，即创建中国地图时存放各个身份的名称、边界坐标
 
     //创建地图，通过读取geojosn数据获得每一个坐标点数据，放到
     function createmap(res:any){
@@ -117,11 +116,7 @@
                     MultiPolygon.forEach((polygon:any)=>{//遍历多面体里每一个单面体的的数据
                         const shape = new THREE.Shape();
                         let arr:number[]=[];//用于存放边界
-                        let x:number=0;//用于记录各个省份的中心
-                        let y:number=0;
                         polygon.forEach((coord:any,index:number)=>{//遍历每一个单面体的坐标
-                            x=x+coord[0];
-                            y=y+coord[1];
                             let z=projection(coord);
                             if(z){
                                 if(index==0){
@@ -136,11 +131,9 @@
                         let mesh=createExtrudeGeometry(shape,arr,element);
                         provinceobj.add(mesh);
 
-                        let center=[x/polygon.length,y/polygon.length];
                         let p:province={//用于临时存放省份名称和坐标
                             name:element.properties.name,
                             coordinate:polygon,
-                            center:center
                         }
                         provinceShape.push(p);//将省份的polygon和名称存入数组
                     })
@@ -150,11 +143,7 @@
                 element.geometry.coordinates.forEach((polygon:any)=>{
                         const shape = new THREE.Shape();
                         let arr:number[]=[];
-                        let x:number=0;//用于记录各个省份的中心
-                        let y:number=0;
                         polygon.forEach((coord:any,index:number)=>{
-                            x=x+coord[0];
-                            y=y+coord[1];
                             let z=projection(coord);
                             if(z){
                                 if(index==0){
@@ -169,11 +158,9 @@
                         let mesh=createExtrudeGeometry(shape,arr,element);
                         provinceobj.add(mesh);
 
-                        let center=[x/polygon.length,y/polygon.length];
                         let p:province={//用于临时存放省份名称和坐标
                             name:element.properties.name,
                             coordinate:polygon,
-                            center:center
                         }
                         provinceShape.push(p);//将省份的polygon和名称存入数组
                 })
@@ -217,15 +204,16 @@
         //地图材质的参数
         let meshmaterrial=[
             new THREE.MeshBasicMaterial({
-                color:'#303133',//外部颜色
+                color:'#980061',//外部颜色
                 transparent:false,
-                // opacity:0.8,
+                reflectivity:0,
+                opacity:0.8,
                 blending:THREE.AdditiveBlending
             }),
             new THREE.MeshBasicMaterial({
-                color:'#909399',//内部颜色
+                color:'#8AC3BE',//内部颜色
                 transparent:false,
-                // opacity:0.55,
+                opacity:0.55,
                 blending:THREE.AdditiveBlending
             }),
         ]
@@ -310,15 +298,15 @@
                             let modelcenter:number[]=[];//记录模型中心坐标
 
                             //创建景点模型
-                            data.chinaScenic.forEach((element1)=>{//遍历省份
+                            data.chinaScenic.forEach((element1)=>{//遍历useScenicSpot里的省份数据
                                 
-                                if(element1.name==cuurrentObjClick.object.name){
-                                    modelcenter=element1.center;
+                                if(element1.name==cuurrentObjClick.object.name){//获取点击省份对应的景点数据
+                                    modelcenter=element1.center;//将省份中心赋值给modelcenter，用于在生成省份模型时设置与景点相同的中心点
                                     data.temperment=[];//清空暂存
 
                                     element1.attractions.forEach((point)=>{//遍历省份的景点
 
-                                        data.temperment.push(point);//添加景点数据到暂存空间
+                                        data.temperment.push(point);//添加要展示的景点数据到暂存
 
                                         const projectionAlone=d3
                                         .geoMercator()
@@ -345,6 +333,7 @@
                                 }
                             })
 
+                            //通过provinceShape生成需要的省份模型
                             provinceShape.forEach((element:province)=>{
                                 if(element.name==cuurrentObjClick.object.name){
                                     const projectionAlone=d3
@@ -395,7 +384,6 @@
                     //清除单独显示的省份模型并重新展示中国模型
                     scene.clear();
                     camera.position.set(0,0,65);
-                    chinaobj.add(cuurrentObjClick.object);
                     isDisplayAlone=false;
                     scene.add(chinaobj);
                 }
